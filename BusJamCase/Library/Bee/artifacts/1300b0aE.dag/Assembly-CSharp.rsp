@@ -122,9 +122,11 @@
 -define:ENABLE_TIMELINE
 -define:ENABLE_LEGACY_INPUT_MANAGER
 -define:TEXTCORE_FONT_ENGINE_1_5_OR_NEWER
+-define:DOTWEEN
 -define:CSHARP_7_OR_LATER
 -define:CSHARP_7_3_OR_NEWER
 -r:"Assets/Aoiti/Plugins/Pathfinding.dll"
+-r:"Assets/Plugins/Demigiant/DOTween/DOTween.dll"
 -r:"C:/Program Files/Unity/Hub/Editor/2022.3.62f1/Editor/Data/Managed/UnityEngine/UnityEditor.CoreModule.dll"
 -r:"C:/Program Files/Unity/Hub/Editor/2022.3.62f1/Editor/Data/Managed/UnityEngine/UnityEditor.DeviceSimulatorModule.dll"
 -r:"C:/Program Files/Unity/Hub/Editor/2022.3.62f1/Editor/Data/Managed/UnityEngine/UnityEditor.DiagnosticsModule.dll"
@@ -333,6 +335,9 @@
 -r:"Library/PackageCache/com.unity.collections@1.2.4/Unity.Collections.LowLevel.ILSupport/Unity.Collections.LowLevel.ILSupport.dll"
 -r:"Library/PackageCache/com.unity.testtools.codecoverage@1.2.6/lib/ReportGenerator/ReportGeneratorMerged.dll"
 -r:"Library/PackageCache/com.unity.visualscripting@1.9.4/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll"
+-r:"Library/Bee/artifacts/1300b0aE.dag/Assembly-CSharp-firstpass.ref.dll"
+-r:"Library/Bee/artifacts/1300b0aE.dag/Cinemachine.ref.dll"
+-r:"Library/Bee/artifacts/1300b0aE.dag/com.unity.cinemachine.editor.ref.dll"
 -r:"Library/Bee/artifacts/1300b0aE.dag/PsdPlugin.ref.dll"
 -r:"Library/Bee/artifacts/1300b0aE.dag/Unity.2D.Animation.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1300b0aE.dag/Unity.2D.Animation.Runtime.ref.dll"
@@ -383,6 +388,21 @@
 -analyzer:"C:/Program Files/Unity/Hub/Editor/2022.3.62f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/Aoiti/Example/2DGrid/MovementController2D.cs"
 "Assets/Aoiti/Example/Tilemap/MoveOnTilemap.cs"
+"Assets/PoolingSystem/Scripts/Enums/PoolType.cs"
+"Assets/PoolingSystem/Scripts/Manager/PoolManager.cs"
+"Assets/PoolingSystem/Scripts/Pool/Poolable.cs"
+"Assets/PoolingSystem/Scripts/SOScripts/PoolItemSO.cs"
+"Assets/PoolingSystem/Scripts/Utils/EnumUtils.cs"
+"Assets/Scripts/Enum/ColorEnums.cs"
+"Assets/Scripts/Game/Bus.cs"
+"Assets/Scripts/Game/BusController.cs"
+"Assets/Scripts/Game/ColorsAndMaterials.cs"
+"Assets/Scripts/Game/Passenger.cs"
+"Assets/Scripts/Game/PassengerController.cs"
+"Assets/Scripts/Game/TileController.cs"
+"Assets/Scripts/Game/WaitingAreaController.cs"
+"Assets/Scripts/Utilites/EventBroker.cs"
+"Assets/Scripts/Utilites/Events.cs"
 -langversion:9.0
 /deterministic
 /optimize+

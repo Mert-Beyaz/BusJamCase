@@ -3,28 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Aoiti.Pathfinding;
-
+using DG.Tweening;
 
 public class MoveOnTilemap : MonoBehaviour
 {
     Vector3Int[] directions=new Vector3Int[4] {Vector3Int.left,Vector3Int.right,Vector3Int.up,Vector3Int.down };
 
     public Tilemap tilemap;
-    public TileAndMovementCost[] tiles;
+    private TileAndMovementCost[] tiles;
     Pathfinder<Vector3Int> pathfinder;
-
-    [System.Serializable]
-    public struct TileAndMovementCost
-    {
-        public Tile tile;
-        public bool movable;
-        public float movementCost;
-    }
 
     public List<Vector3Int> path;
     [Range(0.001f,1f)]
     public float stepTime;
 
+    private Tile _lastTile;
+    [SerializeField] private Transform lastPoint;
 
     public float DistanceFunc(Vector3Int a, Vector3Int b)
     {
@@ -41,42 +35,52 @@ public class MoveOnTilemap : MonoBehaviour
             {
                 if (tilemap.GetTile(a+dir)==tmc.tile)
                 {
-                    if (tmc.movable) result.Add(a + dir, tmc.movementCost);
-
+                    if (tmc.movable && (tmc.color == ColorEnums.None)) result.Add(a + dir, tmc.movementCost);
                 }
             }
-                
         }
         return result;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
+        tiles = TileController.Instance.GetTiles();
+        _lastTile = TileController.Instance.GetLastTile();
         pathfinder = new Pathfinder<Vector3Int>(DistanceFunc, connectionsAndCosts);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) )
+        if (Input.GetMouseButtonDown(0))
         {
-            var currentCellPos=tilemap.WorldToCell(transform.position);
-            var target = tilemap.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            target.z = 0;
-            pathfinder.GenerateAstarPath(currentCellPos, target, out path);
-            StopAllCoroutines();
-            StartCoroutine(Move());
-        }
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
 
-        
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+            {
+                if (hit.collider.CompareTag("Passanger"))
+                {
+                    var currentCellPos = tilemap.WorldToCell(hit.transform.position);
+                    var target = tilemap.WorldToCell(lastPoint.position);
+                    target.z = 0;
+                    pathfinder.GenerateAstarPath(currentCellPos, target, out path);
+                    StopAllCoroutines();
+                    StartCoroutine(Move(hit.transform));
+                }
+            }
+        }
     }
 
-    IEnumerator Move()
+    IEnumerator Move(Transform passengerTransform)
     {
         while (path.Count > 0)
         {
-            transform.position = tilemap.CellToWorld(path[0]);
+            if (tilemap.GetTile(path[0]) == _lastTile)
+            {
+                EventBroker.Publish(Events.SET_WAITING_AREA, passengerTransform.GetComponent<Passenger>());
+                yield break;
+            }
+            passengerTransform.DOMove(tilemap.CellToWorld(path[0]), stepTime);
             path.RemoveAt(0);
             yield return new WaitForSeconds(stepTime);
             
