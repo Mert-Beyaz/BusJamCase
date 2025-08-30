@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Aoiti.Pathfinding;
 using DG.Tweening;
+using static UnityEditor.PlayerSettings;
 
 public class MoveOnTilemap : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class MoveOnTilemap : MonoBehaviour
     public Tilemap tilemap;
     private TileAndMovementCost[] tiles;
     Pathfinder<Vector3Int> pathfinder;
+    private Vector3 _addAreaPos = new(0.6f, 0f, 0.6f);
 
     public List<Vector3Int> path;
     [Range(0.001f,1f)]
@@ -65,6 +67,11 @@ public class MoveOnTilemap : MonoBehaviour
                     target.z = 0;
                     pathfinder.GenerateAstarPath(currentCellPos, target, out path);
                     StopAllCoroutines();
+                    if (path.Count > 0)
+                    {
+                        hit.collider.enabled = false;
+                        tilemap.SetTile(currentCellPos, tiles[0].tile);
+                    }
                     StartCoroutine(Move(hit.transform));
                 }
             }
@@ -73,14 +80,17 @@ public class MoveOnTilemap : MonoBehaviour
 
     IEnumerator Move(Transform passengerTransform)
     {
+        var passenger = passengerTransform.GetComponent<Passenger>();
         while (path.Count > 0)
         {
             if (tilemap.GetTile(path[0]) == _lastTile)
             {
-                EventBroker.Publish(Events.SET_WAITING_AREA, passengerTransform.GetComponent<Passenger>());
+                EventBroker.Publish(Events.SET_WAITING_AREA, passenger);
                 yield break;
             }
-            passengerTransform.DOMove(tilemap.CellToWorld(path[0]), stepTime);
+            passengerTransform.DOMove(tilemap.CellToWorld(path[0]) + _addAreaPos, stepTime);
+            passengerTransform.DOLookAt(tilemap.CellToWorld(path[0]) + _addAreaPos, 0.1f);
+            passenger.SetWalkAnim(true);
             path.RemoveAt(0);
             yield return new WaitForSeconds(stepTime);
             

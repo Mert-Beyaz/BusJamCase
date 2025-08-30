@@ -96,6 +96,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7557550844333169896}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!1 &8821496881930679817
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7661332209995014887}
+  m_Layer: 0
+  m_Name: DoorPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 7148428337604731935, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7661332209995014887
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8821496881930679817}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.104, y: 0.6521931, z: 0.798}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9054074983558000289}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9135842906715555772
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,6 +240,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8748828581107766994, guid: 0d2f64906522ae246831f5aec679a7ce, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8748828581107766994, guid: 0d2f64906522ae246831f5aec679a7ce, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0d2f64906522ae246831f5aec679a7ce, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -270,6 +309,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0d2f64906522ae246831f5aec679a7ce, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1681063102203938280}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0d2f64906522ae246831f5aec679a7ce, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7661332209995014887}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0d2f64906522ae246831f5aec679a7ce, type: 3}
       insertIndex: -1
@@ -338,9 +380,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 0
-  isMoving: 0
+  isFull: 0
   animator: {fileID: 2572183352487413667}
   meshRenderer: {fileID: 4221792712371639776}
+  doorPoint: {fileID: 7661332209995014887}
   seats:
   - IsFull: 0
     Transform: {fileID: 8196665830167356201}

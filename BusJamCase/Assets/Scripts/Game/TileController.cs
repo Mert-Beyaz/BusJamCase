@@ -9,8 +9,6 @@ public class TileController : MonoBehaviour
 
     [SerializeField] private TileAndMovementCost[] tiles;
 
-
-
     private void Awake()
     {
         if (Instance == null)

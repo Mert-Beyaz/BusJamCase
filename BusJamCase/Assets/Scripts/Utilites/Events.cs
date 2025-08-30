@@ -14,8 +14,7 @@ public class Events
     public const string ON_FIRST_TOUCH = "on_first_touch";
 
     public const string SET_WAITING_AREA = "set_waiting_area";
-
-    public const string CHECK_BOXES = "check_boxes";
-    public const string PUT_MONEY = "put_money";
+    public const string DELETE_PASSANGER_WAITING_AREA = "delete_passanger_waiting_area";
+    public const string CHECK_BUS = "check_bus";
 
 }

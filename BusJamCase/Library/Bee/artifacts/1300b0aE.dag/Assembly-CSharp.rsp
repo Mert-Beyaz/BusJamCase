@@ -401,6 +401,7 @@
 "Assets/Scripts/Game/PassengerController.cs"
 "Assets/Scripts/Game/TileController.cs"
 "Assets/Scripts/Game/WaitingAreaController.cs"
+"Assets/Scripts/LevelManager.cs"
 "Assets/Scripts/Utilites/EventBroker.cs"
 "Assets/Scripts/Utilites/Events.cs"
 -langversion:9.0

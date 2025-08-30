@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Passenger
   m_EditorClassIdentifier: 
   PoolType: 3
-  Prefab: {fileID: 3274822394931789001, guid: ac4c65936a9194341b4e5eb7219b78d4, type: 3}
+  Prefab: {fileID: 7000361563774234779, guid: 8caadf80f396d2f408ba39252a9dd11d, type: 3}
   InitialSize: 20

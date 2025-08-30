@@ -17,7 +17,14 @@ public class BusController : MonoBehaviour
 
     private void OnEnable()
     {
+        Subscribe();
         PutBus();
+    }
+
+
+    private void Subscribe()
+    {
+        EventBroker.Subscribe<List<WaitingArea>>(Events.CHECK_BUS, CheckBus);
     }
 
     private void PutBus()
@@ -54,9 +61,35 @@ public class BusController : MonoBehaviour
         return busList[0];
     }
 
+    private void CheckBus(List<WaitingArea> waitingAreaList)
+    {
+        for (int i = 0; i < waitingAreaList.Count; i++)
+        {
+            if (waitingAreaList[i].Passenger != null)
+            {
+                if (busList[0].GetColor() == waitingAreaList[i].Passenger.GetColor() && !busList[0].IsFull)
+                {
+                    busList[0].SitPassenger(waitingAreaList[i].Passenger);
+                    EventBroker.Publish(Events.DELETE_PASSANGER_WAITING_AREA, i);
+                }
+            }
+            
+        } 
+    }
+
     private void SetBusFeatures()
     {
 
+    }
+
+    private void UnSubscribe()
+    {
+        EventBroker.UnSubscribe<List<WaitingArea>>(Events.CHECK_BUS, CheckBus);
+    }
+
+    private void OnDestroy()
+    {
+        UnSubscribe();
     }
 }
 
@@ -64,7 +97,6 @@ public class BusController : MonoBehaviour
 public class BusFeatures
 {
     public ColorEnums Color;
-    public Seat[] seats;
 }
 
 [Serializable]
