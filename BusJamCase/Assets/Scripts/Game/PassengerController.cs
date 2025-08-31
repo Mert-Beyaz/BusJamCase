@@ -10,7 +10,7 @@ public class PassengerController : MonoBehaviour
     [Header("Tilemap")]
     [SerializeField] private Tilemap tilemap;
 
-    private Vector3 _addAreaPos = new(0.6f, 0f, 0.6f);
+    private Vector3 _addAreaPos = new(0.5f, 0f, 0.4f);
     private TileAndMovementCost[] tiles;
 
     private void OnEnable()

@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using TMPro;
 
 public class Timer : MonoBehaviour
@@ -10,10 +7,7 @@ public class Timer : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
 
     [Header("Timer Settings")]
-    [Min(0f)][SerializeField] private float startSeconds = 120f; // Baþlangýç süresi (saniye)
-
-    [Header("Olaylar")]
-    public UnityEvent onCompleted;
+    [Min(0f)][SerializeField] private float startSeconds = 120f;
 
     int _minute = 0;
     int _second = 0;
@@ -29,7 +23,8 @@ public class Timer : MonoBehaviour
     private void Subscribe()
     {
         EventBroker.Subscribe<float>(Events.SET_DISPLAY_TIMER, SetDisplayTimer);
-        EventBroker.Subscribe(Events.START_TIMER, StartTimer);
+        EventBroker.Subscribe(Events.ON_LEVEL_START, StartTimer);
+        EventBroker.Subscribe(Events.STOP_TIME, PauseTimer);
     }
 
     void Update()
@@ -90,8 +85,7 @@ public class Timer : MonoBehaviour
     {
         IsRunning = false;
         UpdateDisplay(RemainingSeconds);
-        EventBroker.Publish(Events.FINISH_TIME);
-        Debug.Log("Yenildin");
+        EventBroker.Publish(Events.ON_LEVEL_FAIL);
     }
 
     private void UpdateDisplay(float seconds)
@@ -103,7 +97,8 @@ public class Timer : MonoBehaviour
     }
     private void UnSubscribe()
     {
-        EventBroker.UnSubscribe(Events.START_TIMER, StartTimer);
+        EventBroker.UnSubscribe(Events.ON_LEVEL_START, StartTimer);
+        EventBroker.UnSubscribe(Events.STOP_TIME, PauseTimer);
         EventBroker.UnSubscribe<float>(Events.SET_DISPLAY_TIMER, SetDisplayTimer);
     }
     private void OnDestroy()

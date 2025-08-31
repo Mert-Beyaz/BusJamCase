@@ -12,6 +12,7 @@ public class Passenger : MonoBehaviour
 
     private void OnEnable()
     {
+        didMove = false;
         GetComponent<Collider>().enabled = true;
     }
 
@@ -23,14 +24,14 @@ public class Passenger : MonoBehaviour
 
     public void SetWalkAnim(bool _isRunning)
     {
-        if (_isRunning) animator.CrossFade("Run", 0.1f);
-        else animator.CrossFade("Idle", 0.1f);
+        if (_isRunning) animator.SetTrigger("Run");
+        else animator.SetTrigger("Idle");
     }  
     
     public void SetSitAnim(bool _isSitting)
     {
-        if (_isSitting) animator.CrossFade("Sit", 0.1f);
-        else animator.CrossFade("Run", 0.1f);
+        if (_isSitting) animator.SetTrigger("Sit");
+        else animator.SetTrigger("Run");
     }
 
     public ColorEnums GetColor() { return color; }

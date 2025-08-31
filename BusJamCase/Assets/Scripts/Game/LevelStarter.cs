@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,13 +5,11 @@ public class LevelStarter : MonoBehaviour
 {
     public static LevelStarter Instance;
 
-    private bool _canIClick = true;
     [SerializeField] private int maxWaitingAreaAmount = 5;
     [SerializeField] private List<Passenger> passengers = new();
     private int _readyPassenger = 0;
 
     #region GET_SET
-    public bool CanIClick { get => _canIClick; set => _canIClick = value; }
     public List<Passenger> Passengers { get => passengers; set => passengers = value; }
     public int ReadyPassenger { get => _readyPassenger; set => _readyPassenger = value; }
 
@@ -35,5 +32,15 @@ public class LevelStarter : MonoBehaviour
         return maxWaitingAreaAmount > _readyPassenger;
     }
 
+    private void OnDestroy()
+    {
+        foreach (var item in passengers)
+        {
+            if (item != null)
+            {
+                PoolManager.Instance.ReturnObject(item.gameObject);
+            }
+        }
+    }
 
 }

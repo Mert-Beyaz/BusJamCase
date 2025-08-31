@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Solo.MOST_IN_ONE;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,8 +15,21 @@ public class Bus : MonoBehaviour
     [Header("Seats")]
     [SerializeField] private List<Seat> seats = new();
 
+    private int passengerCounter = 0;
+
     public bool IsFull { get => isFull; set => isFull = value; }
     public bool IsMoving { get => isMoving; set => isMoving = value; }
+
+    private void OnEnable()
+    {
+        isFull = false;
+        isMoving = false;
+        foreach (var seat in seats)
+        {
+            seat.IsFull = false;
+            seat.Passenger = null;
+        }
+    }
 
     public void SetFeatures(ColorEnums Color)
     {
@@ -33,21 +47,26 @@ public class Bus : MonoBehaviour
             {
                 LevelStarter.Instance.ReadyPassenger--;
                 seat.IsFull = true;
-                seat.Passenger = passenger.gameObject;
+                seat.Passenger = passenger;
+                CheckBusIsFull();
                 passenger.SetWalkAnim(true);
                 SetDoorAnim(true);
-                passenger.transform.DOMove(doorPoint.position, 0.5f).OnComplete(() =>
+                passenger.transform.DOLookAt(doorPoint.position, 0.1f);
+                passenger.transform.DOMove(doorPoint.position, 0.8f).SetEase(Ease.Linear).OnComplete(() =>
                 {
                     SetDoorAnim(false);
                     passenger.transform.DOScale(0.1f, 0.1f).OnComplete(() =>
                     {
+                        Most_HapticFeedback.Generate(Most_HapticFeedback.HapticTypes.LightImpact);
+                        SoundManager.Instance.Play("Pick");
                         passenger.transform.SetParent(transform);
                         passenger.transform.position = seat.Transform.position;
                         passenger.transform.rotation = seat.Transform.rotation;
                         passenger.SetSitAnim(true);
                         passenger.transform.DOScale(1f, 0.1f).OnComplete(() =>
                         {
-                            CheckBusIsFull();
+                            passengerCounter++;
+                            if (isFull && passengerCounter.Equals(seats.Count)) EventBroker.Publish(Events.CHANGE_BUS);
                         });
                     });
                 });
@@ -65,27 +84,25 @@ public class Bus : MonoBehaviour
                 return;
             }
         }
-
         isFull = true;
-
-        EventBroker.Publish(Events.CHANGE_BUS);
     }
 
     private void SetDoorAnim(bool _isOpenning)
     {
-        if (_isOpenning) animator.CrossFade("Open", 0.2f);
-        else animator.CrossFade("Close", 0.2f);
+        if (_isOpenning) animator.SetTrigger("Open");
+        else animator.SetTrigger("Close");
     }
 
     public void ResetBus()
     {
+        passengerCounter = 0;
         isFull = false;
         color = ColorEnums.None;
         foreach (var seat in seats)
         {
             seat.IsFull = false;
-            seat.Passenger.transform.SetParent(PoolManager.Instance.transform);
-            PoolManager.Instance.ReturnObject(seat.Passenger);
+            LevelStarter.Instance.Passengers.Remove(seat.Passenger);
+            PoolManager.Instance.ReturnObject(seat.Passenger.gameObject);
             seat.Passenger = null;
         }
 

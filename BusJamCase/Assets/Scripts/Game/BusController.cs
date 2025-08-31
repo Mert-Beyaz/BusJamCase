@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BusController : MonoBehaviour
 {
-    [SerializeField] private List<BusFeatures> busFeatures = new();
+    [SerializeField] private List<ColorEnums> busFeatures = new();
     [SerializeField] private List<Bus> busList = new();
 
     [SerializeField] private Transform enterPoint;
@@ -21,7 +21,6 @@ public class BusController : MonoBehaviour
         PutBus();
     }
 
-
     private void Subscribe()
     {
         EventBroker.Subscribe<List<WaitingArea>>(Events.CHECK_BUS, CheckBus);
@@ -32,13 +31,16 @@ public class BusController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            var obj = PoolManager.Instance.GetObject(PoolType.Bus);
-            obj.transform.position = enterPoint.position;
-            obj.transform.rotation = enterPoint.rotation;
-            var bus = obj.GetComponent<Bus>();
-            bus.SetFeatures(busFeatures[_busCounter].Color);
-            busList.Add(bus);
-            _busCounter++;
+            if (i < busFeatures.Count)
+            {
+                var obj = PoolManager.Instance.GetObject(PoolType.Bus);
+                obj.transform.position = enterPoint.position;
+                obj.transform.rotation = enterPoint.rotation;
+                var bus = obj.GetComponent<Bus>();
+                bus.SetFeatures(busFeatures[_busCounter]);
+                busList.Add(bus);
+                _busCounter++;
+            }
         }
         BusComeAnim();
     }
@@ -50,6 +52,7 @@ public class BusController : MonoBehaviour
             busList[0].IsMoving = true;
             busList[0].transform.DOMove(firstBusPoint.position, 1f).OnComplete(() =>
             {
+                SoundManager.Instance.Play("Horn");
                 busList[0].IsMoving = false;
                 EventBroker.Publish(Events.CHECK_NEW_BUS);
             });
@@ -59,6 +62,7 @@ public class BusController : MonoBehaviour
 
     private void GoBus(Bus bus)
     {
+        bus.IsMoving = true;
         bus.transform.DOMove(exitPoint.position, 1f).OnComplete(() =>
         {
             bus.ResetBus();
@@ -80,7 +84,7 @@ public class BusController : MonoBehaviour
                 }
             }
         }
-        if (!busList[0].IsMoving)
+        if (busList[0] != null && !busList[0].IsMoving)
         {
             EventBroker.Publish(Events.CHECK_WAITING_AREA);
         }
@@ -92,7 +96,7 @@ public class BusController : MonoBehaviour
         {
             bus.transform.position = enterPoint.position;
             bus.transform.rotation = enterPoint.rotation;
-            bus.SetFeatures(busFeatures[_busCounter].Color);
+            bus.SetFeatures(busFeatures[_busCounter]);
             busList.Add(bus);
             _busCounter++;
         }
@@ -100,7 +104,7 @@ public class BusController : MonoBehaviour
 
         if (busList.Count <= 0)
         {
-            Debug.Log("Kazandýn");
+            EventBroker.Publish(Events.ON_LEVEL_SUCCESS);
         }
     }
 
@@ -118,6 +122,17 @@ public class BusController : MonoBehaviour
         }
     }
 
+    private void Reset()
+    {
+        foreach (var bus in busList)
+        {
+            if (bus != null)
+            {
+                PoolManager.Instance.ReturnObject(bus.gameObject);
+            }
+        }
+    }
+
     private void UnSubscribe()
     {
         EventBroker.UnSubscribe<List<WaitingArea>>(Events.CHECK_BUS, CheckBus);
@@ -126,14 +141,9 @@ public class BusController : MonoBehaviour
 
     private void OnDestroy()
     {
+        Reset();
         UnSubscribe();
     }
-}
-
-[Serializable]
-public class BusFeatures
-{
-    public ColorEnums Color;
 }
 
 [Serializable]
@@ -141,5 +151,5 @@ public class Seat
 {
     public bool IsFull = false;
     public Transform Transform;
-    public GameObject Passenger;
+    public Passenger Passenger;
 }

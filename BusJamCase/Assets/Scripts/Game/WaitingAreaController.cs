@@ -29,7 +29,7 @@ public class WaitingAreaController : MonoBehaviour
                 area.Passenger = passenger;
                 area.IsFull = true;
                 passenger.transform.DOLookAt(area.AreaPoint.position, 0.2f);
-                passenger.transform.DOMove(area.AreaPoint.position, 0.5f).OnComplete(() =>
+                passenger.transform.DOMove(area.AreaPoint.position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
                 {
                     passenger.SetWalkAnim(false);
                     passenger.transform.rotation = area.AreaPoint.rotation;
@@ -40,7 +40,7 @@ public class WaitingAreaController : MonoBehaviour
         }
 
         passenger.SetWalkAnim(false);
-        Debug.Log("Yenildin");
+        EventBroker.Publish(Events.ON_LEVEL_FAIL);
     }
 
     private void DeletePassengerInArea(int index)
@@ -53,24 +53,10 @@ public class WaitingAreaController : MonoBehaviour
     {
         foreach (var item in waitingAreaList)
         {
-            if (!item.IsFull)
-            {
-                EventBroker.Publish(Events.RESET_CLICK_COUNTER, GetFullAreaAmount());
-                return;
-            }
+            if (!item.IsFull) return;
         }
 
-        Debug.Log("Yenildin");
-    }
-
-    private int GetFullAreaAmount()
-    {
-        var _amount = 0;
-        foreach (var item in waitingAreaList)
-        {
-            if (item.IsFull) _amount++;
-        }
-        return _amount;
+        EventBroker.Publish(Events.ON_LEVEL_FAIL);
     }
 
     private void CheckForNewBus()
