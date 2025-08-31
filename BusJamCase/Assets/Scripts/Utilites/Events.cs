@@ -10,11 +10,24 @@ public class Events
     public const string ON_NEXT_LEVEL = "on_next_level";
     public const string ON_SAVE_DATA = "on_save_data";
 
+    public const string START_TIMER = "start_timer";
+    public const string SET_DISPLAY_TIMER = "set_display_timer";
+    public const string FINISH_TIME = "finish_time";
+
 
     public const string ON_FIRST_TOUCH = "on_first_touch";
 
     public const string SET_WAITING_AREA = "set_waiting_area";
-    public const string DELETE_PASSANGER_WAITING_AREA = "delete_passanger_waiting_area";
+    public const string DELETE_PASSENGER_WAITING_AREA = "delete_passenger_waiting_area";
+    public const string CHECK_WAITING_AREA = "check_waiting_area";
+
     public const string CHECK_BUS = "check_bus";
+    public const string CHECK_NEW_BUS = "check_new_bus";
+    public const string CHANGE_BUS = "change_bus";
+
+    public const string RESET_CLICK_COUNTER = "reset_click_counter";
+
+    public const string SET_CLICKABLE_PASSENGER = "set_clickble_passenger";
+
 
 }

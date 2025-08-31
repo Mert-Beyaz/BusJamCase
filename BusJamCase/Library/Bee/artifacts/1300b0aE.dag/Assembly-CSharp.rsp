@@ -397,6 +397,7 @@
 "Assets/Scripts/Game/Bus.cs"
 "Assets/Scripts/Game/BusController.cs"
 "Assets/Scripts/Game/ColorsAndMaterials.cs"
+"Assets/Scripts/Game/LevelStarter.cs"
 "Assets/Scripts/Game/Passenger.cs"
 "Assets/Scripts/Game/PassengerController.cs"
 "Assets/Scripts/Game/TileController.cs"

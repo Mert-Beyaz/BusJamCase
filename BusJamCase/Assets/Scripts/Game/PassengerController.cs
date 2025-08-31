@@ -6,7 +6,6 @@ using UnityEngine.Tilemaps;
 public class PassengerController : MonoBehaviour
 {
     [SerializeField] private List<PassengerFeatures> passengersFeatures = new();
-    [SerializeField] private List<Passenger> passengers = new();
 
     [Header("Tilemap")]
     [SerializeField] private Tilemap tilemap;
@@ -27,7 +26,7 @@ public class PassengerController : MonoBehaviour
             var obj = PoolManager.Instance.GetObject(PoolType.Passenger);
             var passanger = obj.GetComponent<Passenger>();
             passanger.SetFeatures(item.Color);
-            passengers.Add(passanger);
+            LevelStarter.Instance.Passengers.Add(passanger);
 
             obj.transform.position = tilemap.CellToWorld(item.PassengerPos) + _addAreaPos;
 
@@ -39,6 +38,7 @@ public class PassengerController : MonoBehaviour
                 }
             }
         }
+        EventBroker.Publish(Events.SET_CLICKABLE_PASSENGER);
     }
 
     private void SetTile(Vector3Int pos, TileBase tile = null)

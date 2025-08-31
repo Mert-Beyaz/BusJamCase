@@ -3,9 +3,12 @@ using UnityEngine;
 public class Passenger : MonoBehaviour
 {
     [SerializeField] private ColorEnums color;
-    [SerializeField] private bool isMoving = false;
+    [SerializeField] private bool didMove = false;
     [SerializeField] private Animator animator;
     [SerializeField] private SkinnedMeshRenderer meshRenderer;
+    [SerializeField] private Outline outline;
+
+    public bool DidMove { get => didMove; set => didMove = value; }
 
     private void OnEnable()
     {
@@ -20,15 +23,20 @@ public class Passenger : MonoBehaviour
 
     public void SetWalkAnim(bool _isRunning)
     {
-        if (_isRunning) animator.CrossFade("Run", 0.2f);
-        else animator.CrossFade("Idle", 0.2f);
+        if (_isRunning) animator.CrossFade("Run", 0.1f);
+        else animator.CrossFade("Idle", 0.1f);
     }  
     
     public void SetSitAnim(bool _isSitting)
     {
-        if (_isSitting) animator.CrossFade("Sit", 0.2f);
-        else animator.CrossFade("Walk", 0.2f);
+        if (_isSitting) animator.CrossFade("Sit", 0.1f);
+        else animator.CrossFade("Run", 0.1f);
     }
 
     public ColorEnums GetColor() { return color; }
+
+    public void SetOutline(bool isActive)
+    {
+        outline.enabled = isActive;
+    }
 }

@@ -25,6 +25,7 @@ public class BusController : MonoBehaviour
     private void Subscribe()
     {
         EventBroker.Subscribe<List<WaitingArea>>(Events.CHECK_BUS, CheckBus);
+        EventBroker.Subscribe(Events.CHANGE_BUS, ChangeBus);
     }
 
     private void PutBus()
@@ -44,21 +45,25 @@ public class BusController : MonoBehaviour
 
     private void BusComeAnim()
     {
-        busList[0].transform.DOMove(firstBusPoint.position, 1f);
-        busList[1].transform.DOMove(secondBusPoint.position, 1f);
+        if (busList.Count > 0) 
+        {
+            busList[0].IsMoving = true;
+            busList[0].transform.DOMove(firstBusPoint.position, 1f).OnComplete(() =>
+            {
+                busList[0].IsMoving = false;
+                EventBroker.Publish(Events.CHECK_NEW_BUS);
+            });
+        } 
+        if (busList.Count > 1) busList[1].transform.DOMove(secondBusPoint.position, 1f);
     }
 
     private void GoBus(Bus bus)
     {
         bus.transform.DOMove(exitPoint.position, 1f).OnComplete(() =>
         {
-            SetBusFeatures();
+            bus.ResetBus();
+            AddNewBus(bus);
         });
-    }
-
-    private Bus CurrentlyBus()
-    {
-        return busList[0];
     }
 
     private void CheckBus(List<WaitingArea> waitingAreaList)
@@ -67,24 +72,56 @@ public class BusController : MonoBehaviour
         {
             if (waitingAreaList[i].Passenger != null)
             {
-                if (busList[0].GetColor() == waitingAreaList[i].Passenger.GetColor() && !busList[0].IsFull)
+                if (busList[0].GetColor() == waitingAreaList[i].Passenger.GetColor()
+                    && !busList[0].IsFull && !busList[0].IsMoving)
                 {
                     busList[0].SitPassenger(waitingAreaList[i].Passenger);
-                    EventBroker.Publish(Events.DELETE_PASSANGER_WAITING_AREA, i);
+                    EventBroker.Publish(Events.DELETE_PASSENGER_WAITING_AREA, i);
                 }
             }
-            
-        } 
+        }
+        if (!busList[0].IsMoving)
+        {
+            EventBroker.Publish(Events.CHECK_WAITING_AREA);
+        }
     }
 
-    private void SetBusFeatures()
+    private void AddNewBus(Bus bus)
     {
+        if (_busCounter < busFeatures.Count)
+        {
+            bus.transform.position = enterPoint.position;
+            bus.transform.rotation = enterPoint.rotation;
+            bus.SetFeatures(busFeatures[_busCounter].Color);
+            busList.Add(bus);
+            _busCounter++;
+        }
+        else PoolManager.Instance.ReturnObject(bus.gameObject);
 
+        if (busList.Count <= 0)
+        {
+            Debug.Log("Kazandýn");
+        }
+    }
+
+    private void ChangeBus()
+    {
+        if (busList.Count > 0)
+        {
+            var tempBus = busList[0];
+            if (tempBus.IsFull)
+            {
+                busList.RemoveAt(0);
+                GoBus(tempBus);
+                BusComeAnim();
+            }
+        }
     }
 
     private void UnSubscribe()
     {
         EventBroker.UnSubscribe<List<WaitingArea>>(Events.CHECK_BUS, CheckBus);
+        EventBroker.UnSubscribe(Events.CHANGE_BUS, ChangeBus);
     }
 
     private void OnDestroy()
@@ -104,5 +141,5 @@ public class Seat
 {
     public bool IsFull = false;
     public Transform Transform;
-    public GameObject Passanger;
+    public GameObject Passenger;
 }
