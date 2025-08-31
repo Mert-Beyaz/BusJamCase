@@ -4,26 +4,26 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Aoiti.Pathfinding;
 using DG.Tweening;
-using static UnityEditor.PlayerSettings;
+using Helpers;
+using Solo.MOST_IN_ONE;
 
 public class MoveOnTilemap : MonoBehaviour
 {
     Vector3Int[] directions=new Vector3Int[4] {Vector3Int.left,Vector3Int.right,Vector3Int.up,Vector3Int.down };
 
+
     public Tilemap tilemap;
     private TileAndMovementCost[] tiles;
     Pathfinder<Vector3Int> pathfinder;
-    private Vector3 _addAreaPos = new(0.6f, 0f, 0.6f);
+    private Vector3 _addAreaPos = new(0.5f, 0f, 0.4f);
 
-    public List<Vector3Int> path;
+    //public List<Vector3Int> path;
     private List<Vector3Int> _pathForOutline;
     [Range(0.001f,1f)]
     public float stepTime;
 
     private Tile _lastTile;
     [SerializeField] private Transform lastPoint;
-
-    private int _clickCounter = 0;
 
     public float DistanceFunc(Vector3Int a, Vector3Int b)
     {
@@ -56,14 +56,13 @@ public class MoveOnTilemap : MonoBehaviour
     }
     private void Subscribe()
     {
-        EventBroker.Subscribe<int>(Events.RESET_CLICK_COUNTER, ResetClickCounter);
         EventBroker.Subscribe(Events.SET_CLICKABLE_PASSENGER, SetClickablePassenger);
     }
 
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && LevelStarter.Instance.CanIClick && LevelStarter.Instance.CanITakeAPassenger())
+        if (Input.GetMouseButtonDown(0) && GameManager.Instance.CanIClick && LevelStarter.Instance.CanITakeAPassenger())
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -72,25 +71,27 @@ public class MoveOnTilemap : MonoBehaviour
             {
                 if (hit.collider.CompareTag("Passanger"))
                 {
-                    _clickCounter++;
                     var currentCellPos = tilemap.WorldToCell(hit.transform.position);
                     var target = tilemap.WorldToCell(lastPoint.position);
                     target.z = 0;
+                    List<Vector3Int> path = new();
                     pathfinder.GenerateAstarPath(currentCellPos, target, out path);
                     if (path.Count > 0)
                     {
+                        Most_HapticFeedback.Generate(Most_HapticFeedback.HapticTypes.LightImpact);
+                        SoundManager.Instance.Play("Pick");
                         LevelStarter.Instance.ReadyPassenger++;
                         hit.collider.enabled = false;
                         tilemap.SetTile(currentCellPos, tiles[0].tile);
                         SetClickablePassenger();
-                        StartCoroutine(Move(hit.transform));
+                        StartCoroutine(Move(hit.transform, path));
                     }
                 }
             }
         }
     }
 
-    IEnumerator Move(Transform passangerTransform)
+    IEnumerator Move(Transform passangerTransform, List<Vector3Int> path)
     {
         var passenger = passangerTransform.GetComponent<Passenger>();
         passenger.SetWalkAnim(true);
@@ -106,20 +107,15 @@ public class MoveOnTilemap : MonoBehaviour
             passangerTransform.DOMove(tilemap.CellToWorld(path[0]) + _addAreaPos, stepTime).SetEase(Ease.Linear);
             passangerTransform.DOLookAt(tilemap.CellToWorld(path[0]) + _addAreaPos, 0.1f);
             path.RemoveAt(0);
-            yield return new WaitForSeconds(stepTime);
+            yield return Helper.GetWait(stepTime);
         }
-    }
-
-    private void ResetClickCounter(int _fullAreaAmount)
-    {
-        _clickCounter = _fullAreaAmount;
     }
 
     private void SetClickablePassenger()
     {
         foreach (var passenger in LevelStarter.Instance.Passengers)
         {
-            if (!passenger.DidMove)
+            if (!passenger.DidMove && tilemap != null)
             {
                 var currentCellPos = tilemap.WorldToCell(passenger.transform.position);
                 var target = tilemap.WorldToCell(lastPoint.position);
@@ -132,7 +128,6 @@ public class MoveOnTilemap : MonoBehaviour
 
     private void UnSubscribe()
     {
-        EventBroker.UnSubscribe<int>(Events.RESET_CLICK_COUNTER, ResetClickCounter);
         EventBroker.Subscribe(Events.SET_CLICKABLE_PASSENGER, SetClickablePassenger);
     }
 

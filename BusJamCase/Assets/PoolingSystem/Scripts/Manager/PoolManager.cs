@@ -65,7 +65,6 @@ public class PoolManager : MonoBehaviour
         var poolable = obj.GetComponent<Poolable>();
         if (poolable == null)
         {
-            Debug.LogWarning("Objede Poolable component yok, yok ediliyor.");
             Destroy(obj);
             return;
         }
@@ -74,16 +73,18 @@ public class PoolManager : MonoBehaviour
 
         if (!_poolDic.ContainsKey(type))
         {
-            Debug.LogWarning($"Returned object does not belong to pool {type}. Destroying.");
             Destroy(obj);
             return;
         }
 
-        obj.SetActive(false);
-        obj.transform.SetParent(transform);
-        obj.transform.localPosition = Vector3.zero;
-        obj.transform.localRotation = Quaternion.identity;
-        _poolDic[type].Enqueue(obj);
+        if (!_poolDic[type].Contains(obj))
+        {
+            obj.SetActive(false);
+            obj.transform.SetParent(transform);
+            obj.transform.localPosition = Vector3.zero;
+            obj.transform.localRotation = Quaternion.identity;
+            _poolDic[type].Enqueue(obj);
+        }
     }
 
 }

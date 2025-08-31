@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Bus
   m_EditorClassIdentifier: 
   PoolType: 2
-  Prefab: {fileID: 8569604168984687643, guid: ea8a9ab7f2a959a46b3d9d732172e548, type: 3}
+  Prefab: {fileID: 5442274618175891042, guid: e916443ae8b10fd4b9d82c766825bd97, type: 3}
   InitialSize: 4
