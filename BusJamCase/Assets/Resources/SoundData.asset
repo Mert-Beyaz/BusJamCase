@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeffb5d23dfa8594a9c79853a2a38a1d, type: 3}
+  m_Name: SoundData
+  m_EditorClassIdentifier: 
+  soundClips:
+  - _name: Pick
+    _clip: {fileID: 8300000, guid: 4921b51ca9f4755468f6b73017913d0e, type: 3}
+    _volume: 0.5
+  - _name: Horn
+    _clip: {fileID: 8300000, guid: 9e5435edb29ca75488058d1925e0b5c3, type: 3}
+    _volume: 0.5
+  - _name: Lose
+    _clip: {fileID: 8300000, guid: f639afdd4cd06f04887a3ffa48c10493, type: 3}
+    _volume: 0.5
+  - _name: Win
+    _clip: {fileID: 8300000, guid: bca27a6e47a85bb43b83ce212f5dfc86, type: 3}
+    _volume: 0.5
