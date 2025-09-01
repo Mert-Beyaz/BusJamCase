@@ -343,7 +343,6 @@
 "Assets/Scripts/Game/TileController.cs"
 "Assets/Scripts/Game/Timer.cs"
 "Assets/Scripts/Game/WaitingAreaController.cs"
-"Assets/Scripts/Helper.cs"
 "Assets/Scripts/Managers/GameManager.cs"
 "Assets/Scripts/Managers/LevelManager.cs"
 "Assets/Scripts/Managers/SoundManager.cs"
@@ -352,6 +351,7 @@
 "Assets/Scripts/Sound/SoundData.cs"
 "Assets/Scripts/Utilites/EventBroker.cs"
 "Assets/Scripts/Utilites/Events.cs"
+"Assets/Scripts/Utilites/Helper.cs"
 "Assets/Scripts/Utilites/Pathfinding.cs"
 -langversion:9.0
 /deterministic
