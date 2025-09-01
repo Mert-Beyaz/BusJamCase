@@ -1,0 +1,4 @@
+#Mon Sep 01 23:34:31 TRT 2025
+base.0=D\:\\BusJamCase\\BusJamCase\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\launcher\\build\\intermediates\\dex\\release\\mergeDexRelease\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
