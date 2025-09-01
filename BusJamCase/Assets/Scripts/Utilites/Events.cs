@@ -3,10 +3,8 @@ public class Events
     //Game
     public const string ON_LOADING_LEVEL = "on_loading_level";
     public const string ON_LEVEL_START = "on_level_start";
-    public const string ON_LEVEL_FINISH = "on_level_finish";
     public const string ON_LEVEL_SUCCESS = "on_level_success";
     public const string ON_LEVEL_FAIL = "on_level_fail";
-    public const string ON_LEVEL_RESET = "on_level_reset";
     public const string ON_NEXT_LEVEL = "on_next_level";
 
     public const string SET_DISPLAY_TIMER = "set_display_timer";
@@ -24,6 +22,8 @@ public class Events
     public const string CHANGE_BUS = "change_bus";
 
     public const string SET_CLICKABLE_PASSENGER = "set_clickble_passenger";
+
+    public const string USE_LIFE = "use_life";
 
 
 }

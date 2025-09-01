@@ -946,7 +946,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 894139511528479606}
-  - component: {fileID: 5872997491947815043}
+  - component: {fileID: 5530115893989854474}
+  - component: {fileID: 3781367533715899241}
   m_Layer: 0
   m_Name: ClickController
   m_TagString: Untagged
@@ -970,7 +971,7 @@ Transform:
   - {fileID: 710561441535977789}
   m_Father: {fileID: 4641295516369375780}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5872997491947815043
+--- !u!114 &5530115893989854474
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -979,12 +980,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 4926136802986650450}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5c52cb10daf7db4a9a547ddbb74f4a8, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c31d5683decf4140b9d7fa1811d67b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 2757215342108605113}
-  stepTime: 0.2
   lastPoint: {fileID: 710561441535977789}
+  stepTime: 0.2
+--- !u!114 &3781367533715899241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4926136802986650450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 759e26d0b6e991248943170fa66fb1cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilemap: {fileID: 2757215342108605113}
 --- !u!1 &6399731859737693983
 GameObject:
   m_ObjectHideFlags: 0

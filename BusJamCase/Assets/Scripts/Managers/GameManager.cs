@@ -3,11 +3,14 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    private GameState _gameState;
+
     private bool _canIClick = false;
     public bool CanIClick
     {
         get => _canIClick;
     }
+    public GameState GameState { get => _gameState; set => _gameState = value; }
 
     private void Awake()
     {
@@ -30,8 +33,8 @@ public class GameManager : MonoBehaviour
     private void Subscribe()
     {
         EventBroker.Subscribe(Events.ON_LEVEL_START, StartLevel);
-        EventBroker.Subscribe(Events.ON_LEVEL_SUCCESS, FinishLevel);
-        EventBroker.Subscribe(Events.ON_LEVEL_FAIL, FinishLevel);
+        EventBroker.Subscribe(Events.ON_LEVEL_SUCCESS, WinLevel);
+        EventBroker.Subscribe(Events.ON_LEVEL_FAIL, LoseLevel);
     }
 
     private void StartLevel()
@@ -39,19 +42,33 @@ public class GameManager : MonoBehaviour
         _canIClick = true;
     }
 
-    private void FinishLevel()
+    private void WinLevel()
     {
+        _gameState = GameState.Wait;
+        _canIClick = false;
+    } 
+    
+    private void LoseLevel()
+    {
+        _gameState = GameState.Wait;
+        EventBroker.Publish(Events.USE_LIFE);
         _canIClick = false;
     }
 
     private void UnSubscribe()
     {
         EventBroker.UnSubscribe(Events.ON_LEVEL_START, StartLevel);
-        EventBroker.UnSubscribe(Events.ON_LEVEL_SUCCESS, FinishLevel);
-        EventBroker.UnSubscribe(Events.ON_LEVEL_FAIL, FinishLevel);
+        EventBroker.UnSubscribe(Events.ON_LEVEL_SUCCESS, WinLevel);
+        EventBroker.UnSubscribe(Events.ON_LEVEL_FAIL, LoseLevel);
     }
     private void OnDestroy()
     {
         UnSubscribe();
     }
+}
+
+public enum GameState
+{
+    Play,
+    Wait,
 }

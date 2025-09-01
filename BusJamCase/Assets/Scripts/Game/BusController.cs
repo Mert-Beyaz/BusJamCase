@@ -8,6 +8,7 @@ public class BusController : MonoBehaviour
     [SerializeField] private List<ColorEnums> busFeatures = new();
     [SerializeField] private List<Bus> busList = new();
 
+    [Header("Points")]
     [SerializeField] private Transform enterPoint;
     [SerializeField] private Transform firstBusPoint;
     [SerializeField] private Transform secondBusPoint;
@@ -84,7 +85,7 @@ public class BusController : MonoBehaviour
                 }
             }
         }
-        if (busList[0] != null && !busList[0].IsMoving)
+        if (busList[0] != null && !busList[0].IsMoving && !busList[0].IsFull)
         {
             EventBroker.Publish(Events.CHECK_WAITING_AREA);
         }
@@ -152,4 +153,5 @@ public class Seat
     public bool IsFull = false;
     public Transform Transform;
     public Passenger Passenger;
+    public ParticleSystem SpawnParticle;
 }

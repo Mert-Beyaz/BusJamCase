@@ -1,5 +1,4 @@
 using Helpers;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,10 +7,11 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance;
     [SerializeField] private List<LevelData> levelList = new();
-    private const string LevelIDKey = "LevelID";
-    private const string CurrentLevelKey = "CurrentLevel";
-    private GameObject levelHolder = null;
-    private bool selectedLevel = false;
+
+    private const string LEVEL_ID_KEY = "level_id";
+    private const string CURRENT_LEVEL_KEY = "current_level";
+    private GameObject _levelHolder = null;
+    private bool _selectedLevel = false;
 
     private void Awake()
     {
@@ -30,28 +30,25 @@ public class LevelManager : MonoBehaviour
 
     private void SetData()
     {
-        selectedLevel = true;
-        LevelID = PlayerPrefs.GetInt(LevelIDKey, 1);
+        _selectedLevel = true;
+        LevelID = PlayerPrefs.GetInt(LEVEL_ID_KEY, 1);
         if (levelList.Count < LevelID)
         {
-            if (PlayerPrefs.HasKey(CurrentLevelKey))
+            if (PlayerPrefs.HasKey(CURRENT_LEVEL_KEY))
             {
-                CurrentLevel = PlayerPrefs.GetInt(CurrentLevelKey);
+                CurrentLevel = PlayerPrefs.GetInt(CURRENT_LEVEL_KEY);
             }
             else
             {
-                CurrentLevel = UnityEngine.Random.Range(1, levelList.Count);
-                PlayerPrefs.SetInt(CurrentLevelKey, CurrentLevel);
+                CurrentLevel = Random.Range(1, levelList.Count);
+                PlayerPrefs.SetInt(CURRENT_LEVEL_KEY, CurrentLevel);
                 PlayerPrefs.Save();
             }
         }
         else CurrentLevel = LevelID;
 
-        PlayerPrefs.SetInt(CurrentLevelKey, CurrentLevel);
+        PlayerPrefs.SetInt(CURRENT_LEVEL_KEY, CurrentLevel);
         PlayerPrefs.Save();
-
-        Debug.Log(LevelID + " = LevelID");
-        Debug.Log(CurrentLevel + " = CurrentLevel");
     }
 
 
@@ -62,20 +59,20 @@ public class LevelManager : MonoBehaviour
 
     public int LevelID
     {
-        get => PlayerPrefs.GetInt(LevelIDKey, 1);
+        get => PlayerPrefs.GetInt(LEVEL_ID_KEY, 1);
         set
         {
-            PlayerPrefs.SetInt(LevelIDKey, value);
+            PlayerPrefs.SetInt(LEVEL_ID_KEY, value);
             PlayerPrefs.Save();
         }
     }
 
     private int CurrentLevel
     {
-        get => PlayerPrefs.GetInt(CurrentLevelKey, 1);
+        get => PlayerPrefs.GetInt(CURRENT_LEVEL_KEY, 1);
         set
         {
-            PlayerPrefs.SetInt(CurrentLevelKey, value);
+            PlayerPrefs.SetInt(CURRENT_LEVEL_KEY, value);
             PlayerPrefs.Save();
         }
     }
@@ -88,7 +85,7 @@ public class LevelManager : MonoBehaviour
     public void NextLevel()
     {
         LevelID++;
-        selectedLevel = false;
+        _selectedLevel = false;
     }
 
     public void ResetData()
@@ -103,20 +100,20 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator SpawnLevel()
     {
-        if (levelHolder != null) Destroy(levelHolder);
+        if (_levelHolder != null) Destroy(_levelHolder);
         yield return Helper.GetWait(0.2f);
         CheckLevelCount();
-        levelHolder = Instantiate(levelList[CurrentLevel - 1].LevelPrefab);
-        levelHolder.SetActive(true);
+        _levelHolder = Instantiate(levelList[CurrentLevel - 1].LevelPrefab);
+        _levelHolder.SetActive(true);
         EventBroker.Publish(Events.SET_DISPLAY_TIMER, LevelTime);
     }
 
     private void CheckLevelCount()
     {
-        if (selectedLevel) return;
+        if (_selectedLevel) return;
 
-        selectedLevel = true; 
-        if (levelList.Count < LevelID) CurrentLevel = UnityEngine.Random.Range(1, levelList.Count);
+        _selectedLevel = true; 
+        if (levelList.Count < LevelID) CurrentLevel = Random.Range(1, levelList.Count);
         else CurrentLevel = LevelID;
     }
     private void UnSubscribe()

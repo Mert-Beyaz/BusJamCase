@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject ingamePanel;
     [SerializeField] private GameObject winPanel;
     [SerializeField] private GameObject losePanel;
+    [SerializeField] private GameObject lifeTimePanel;
 
     [Header("Buttons")]
     [SerializeField] private Button startLevelBtn;
@@ -38,6 +39,17 @@ public class UIManager : MonoBehaviour
     [Range(0, 1)] [SerializeField] private float duration;
     [Range(0, 1)] [SerializeField] private float waitSecond;
 
+    [Header("LifeSystemSettings")]
+    [SerializeField] private int maxLives = 5;
+    [SerializeField] private float lifeRechargeTime = 300f;
+    [SerializeField] private TextMeshProUGUI lifeText;
+    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private TextMeshProUGUI noLifeText;
+    private int _currentLives;
+    private float _timer;
+    private bool _isWorkTimer = false;
+    private const string LIVE_KEY = "lives";
+    private const string LAST_TIME_KEY = "last_life_time";
 
     private void Awake()
     {
@@ -64,12 +76,42 @@ public class UIManager : MonoBehaviour
         tapToStartBtn.onClick.AddListener(() => OnClickTapToStartBtn());
         nextLevelBtn.onClick.AddListener(() => OnClickNextLevelBtn());
         tryAgainBtn.onClick.AddListener(() => OnClickLoseBtn());
+
+        LoadLives();
+        UpdateLifeUI();
+        UpdateTimerUI();
     }
 
     private void Subscribe()
     {
         EventBroker.Subscribe(Events.ON_LEVEL_SUCCESS, WinLevel);
         EventBroker.Subscribe(Events.ON_LEVEL_FAIL, LoseLevel);
+        EventBroker.Subscribe(Events.USE_LIFE, UseLife);
+
+    }
+
+    private void Update()
+    {
+        if (!_isWorkTimer) return;
+
+        if (_currentLives < maxLives)
+        {
+            _timer += Time.deltaTime;
+
+            if (_timer >= lifeRechargeTime)
+            {
+                AddLife(1);
+                _timer -= lifeRechargeTime;
+            }
+
+            UpdateTimerUI();
+        }
+        else
+        {
+            _timer = 0f;
+            _isWorkTimer = false;
+            UpdateTimerUI();
+        }
     }
 
     public void LoadGame()
@@ -80,12 +122,15 @@ public class UIManager : MonoBehaviour
             Most_HapticFeedback.Generate(Most_HapticFeedback.HapticTypes.LightImpact);
             loadingPanel.SetActive(false);
             mainPanel.SetActive(true);
+            lifeTimePanel.SetActive(true);
             startBtnText.SetText("Level " + LevelManager.Instance.LevelID);
         });
     }
     private void LoadLevel()
     {
+        GameManager.Instance.GameState = GameState.Play;
         mainPanel.SetActive(false);
+        lifeTimePanel.SetActive(false);
         ingamePanel.SetActive(true);
         winPanel.SetActive(false);
         losePanel.SetActive(false);
@@ -96,7 +141,6 @@ public class UIManager : MonoBehaviour
 
     private void WinLevel()
     {
-        Debug.Log("Kazandýn");
         SoundManager.Instance.Play("Win");
         Most_HapticFeedback.Generate(Most_HapticFeedback.HapticTypes.Success);
         EventBroker.Publish(Events.STOP_TIME);
@@ -107,18 +151,32 @@ public class UIManager : MonoBehaviour
     
     private void LoseLevel()
     {
-        Debug.Log("Yenildin");
         SoundManager.Instance.Play("Lose");
         Most_HapticFeedback.Generate(Most_HapticFeedback.HapticTypes.Failure);
         EventBroker.Publish(Events.STOP_TIME);
+        StartCoroutine(LosePanel());
+    }
+    private IEnumerator LosePanel()
+    {
+        yield return Helper.GetWait(1f);
         ingamePanel.SetActive(false);
         winPanel.SetActive(false);
         losePanel.SetActive(true);
+        lifeTimePanel.SetActive(true);
     }
 
     #region Buttons
     private void OnClickStartBtn()
     {
+        if (_currentLives <= 0) 
+        {
+            Most_HapticFeedback.Generate(Most_HapticFeedback.HapticTypes.MediumImpact);
+            noLifeText.DOFade(1, 1).OnComplete(() =>
+            {
+                noLifeText.DOFade(0, 1);
+            });
+            return;
+        }
         StartCoroutine(PlayTransition(LoadLevel));
         Most_HapticFeedback.Generate(Most_HapticFeedback.HapticTypes.LightImpact);
     }
@@ -138,12 +196,20 @@ public class UIManager : MonoBehaviour
 
     private void OnClickLoseBtn()
     {
+        if (_currentLives <= 0)
+        {
+            Most_HapticFeedback.Generate(Most_HapticFeedback.HapticTypes.MediumImpact);
+            noLifeText.DOFade(1, 1).OnComplete(() =>
+            {
+                noLifeText.DOFade(0,1);
+            });
+            return;
+        }
         StartCoroutine(PlayTransition(LoadLevel));
         Most_HapticFeedback.Generate(Most_HapticFeedback.HapticTypes.LightImpact);
     }
 
     #endregion
-
 
     private IEnumerator PlayTransition(Action action)
     {
@@ -153,13 +219,113 @@ public class UIManager : MonoBehaviour
         yield return Helper.GetWait(waitSecond);
         yield return transitionImg.DOFade(0, duration).WaitForCompletion();
         transitionImg.gameObject.SetActive(false);
-
     }
+
+    #region LifeSystem
+    private void UseLife()
+    {
+        if (_currentLives <= 0) return;
+
+        _isWorkTimer = true;
+        _currentLives--;
+
+        SaveLives();
+        UpdateLifeUI();
+    }
+
+    private void AddLife(int amount)
+    {
+        _currentLives = Mathf.Min(_currentLives + amount, maxLives);
+
+        if (_currentLives >= maxLives)
+        {
+            _timer = 0f;
+            _isWorkTimer = false;
+        }
+
+        SaveLives();
+        UpdateLifeUI();
+    }
+
+    private void UpdateLifeUI()
+    {
+        if (lifeText != null)
+            lifeText.SetText(_currentLives.ToString());
+    }
+
+    private void UpdateTimerUI()
+    {
+        if (timerText != null)
+        {
+            if (_currentLives < maxLives)
+            {
+                float remaining = lifeRechargeTime - _timer;
+                int minutes = Mathf.FloorToInt(remaining / 60f);
+                int seconds = Mathf.FloorToInt(remaining % 60f);
+                timerText.SetText($"{minutes:D2}:{seconds:D2}");
+            }
+            else
+            {
+                timerText.SetText("MAX");
+            }
+        }
+    }
+
+    private void SaveLives()
+    {
+        PlayerPrefs.SetInt(LIVE_KEY, _currentLives);
+
+        if (_currentLives < maxLives)
+        {
+            DateTime lastStart = DateTime.Now - TimeSpan.FromSeconds(_timer);
+            PlayerPrefs.SetString(LAST_TIME_KEY, lastStart.ToBinary().ToString());
+        }
+        else
+        {
+            PlayerPrefs.DeleteKey(LAST_TIME_KEY);
+        }
+
+        PlayerPrefs.Save();
+    }
+
+    private void LoadLives()
+    {
+        _currentLives = PlayerPrefs.GetInt(LIVE_KEY, maxLives);
+
+        if (PlayerPrefs.HasKey(LAST_TIME_KEY))
+        {
+            long temp = Convert.ToInt64(PlayerPrefs.GetString(LAST_TIME_KEY));
+            DateTime lastTime = DateTime.FromBinary(temp);
+            TimeSpan diff = DateTime.Now - lastTime;
+
+            int recoveredLives = (int)(diff.TotalSeconds / lifeRechargeTime);
+            _currentLives = Mathf.Min(_currentLives + recoveredLives, maxLives);
+
+            if (_currentLives < maxLives)
+            {
+                _timer = (float)(diff.TotalSeconds % lifeRechargeTime);
+                _isWorkTimer = true;
+            }
+            else
+            {
+                _timer = 0f;
+                _isWorkTimer = false;
+            }
+        }
+        else
+        {
+            _timer = 0f;
+            _isWorkTimer = (_currentLives < maxLives);
+        }
+    }
+
+    #endregion
 
     private void UnSubscribe()
     {
         EventBroker.UnSubscribe(Events.ON_LEVEL_SUCCESS, WinLevel);
         EventBroker.UnSubscribe(Events.ON_LEVEL_FAIL, LoseLevel);
+        EventBroker.UnSubscribe(Events.USE_LIFE, UseLife);
     }
     private void OnDestroy()
     {

@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEngine;
 
 #if UNITY_EDITOR
 public class DeleteData : EditorWindow
@@ -6,7 +7,7 @@ public class DeleteData : EditorWindow
     [MenuItem("Data/Delete Save")]
     public static void DeleteSaveFunction()
     {
-       LevelManager.Instance.ResetData();
+        PlayerPrefs.DeleteAll();
     }
 }
 #endif

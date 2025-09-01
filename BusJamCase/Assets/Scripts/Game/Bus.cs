@@ -24,6 +24,7 @@ public class Bus : MonoBehaviour
     {
         isFull = false;
         isMoving = false;
+        passengerCounter = 0;
         foreach (var seat in seats)
         {
             seat.IsFull = false;
@@ -59,6 +60,7 @@ public class Bus : MonoBehaviour
                     {
                         Most_HapticFeedback.Generate(Most_HapticFeedback.HapticTypes.LightImpact);
                         SoundManager.Instance.Play("Pick");
+                        seat.SpawnParticle.Play();
                         passenger.transform.SetParent(transform);
                         passenger.transform.position = seat.Transform.position;
                         passenger.transform.rotation = seat.Transform.rotation;
@@ -66,7 +68,7 @@ public class Bus : MonoBehaviour
                         passenger.transform.DOScale(1f, 0.1f).OnComplete(() =>
                         {
                             passengerCounter++;
-                            if (isFull && passengerCounter.Equals(seats.Count)) EventBroker.Publish(Events.CHANGE_BUS);
+                            if (isFull && passengerCounter >= seats.Count) EventBroker.Publish(Events.CHANGE_BUS);
                         });
                     });
                 });

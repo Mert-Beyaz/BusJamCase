@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Level 7
   m_EditorClassIdentifier: 
   LevelPrefab: {fileID: 709131121492162249, guid: 2b7257f039336c54d8dba07ed35de604, type: 3}
-  levelTime: 100
+  levelTime: 50

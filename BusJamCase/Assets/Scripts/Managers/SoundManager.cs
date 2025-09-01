@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    [SerializeField] int maxMultipleSound = 5;
-
-    private SoundData _soundData;
     public static SoundManager Instance;
-
-    Dictionary<string, float> volume = new Dictionary<string, float>();
-    Dictionary<string, AudioClip> clip = new Dictionary<string, AudioClip>();
-
-    AudioSource[] audioSources;
+    [SerializeField] int maxMultipleSound = 5;
+    private SoundData _soundData;
+    private Dictionary<string, float> volume = new Dictionary<string, float>();
+    private Dictionary<string, AudioClip> clip = new Dictionary<string, AudioClip>();
+    private AudioSource[] audioSources;
 
     private void Awake()
     {

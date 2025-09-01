@@ -11,11 +11,11 @@ public class PassengerController : MonoBehaviour
     [SerializeField] private Tilemap tilemap;
 
     private Vector3 _addAreaPos = new(0.5f, 0f, 0.4f);
-    private TileAndMovementCost[] tiles;
+    private TileAndMovementCost[] _tiles;
 
     private void OnEnable()
     {
-        tiles = TileController.Instance.GetTiles();
+        _tiles = TileController.Instance.GetTiles();
         PutPassenger();
     }
 
@@ -30,7 +30,7 @@ public class PassengerController : MonoBehaviour
 
             obj.transform.position = tilemap.CellToWorld(item.PassengerPos) + _addAreaPos;
 
-            foreach (TileAndMovementCost tile in tiles)
+            foreach (TileAndMovementCost tile in _tiles)
             {
                 if (tile.color == item.Color)
                 {
@@ -45,7 +45,7 @@ public class PassengerController : MonoBehaviour
     {
         if (tile == null)
         {
-            tilemap.SetTile(pos, tiles[0].tile);
+            tilemap.SetTile(pos, _tiles[0].tile);
             return;
 
         }
