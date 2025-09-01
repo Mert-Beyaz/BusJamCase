@@ -1,0 +1,20 @@
+<dependencies>
+  <compile
+      roots="D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary::release">
+    <dependency
+        name="D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary::release"
+        simpleName="Gradle:unityLibrary"/>
+  </compile>
+  <package
+      roots="D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary::release,__local_aars__:D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\libs\unity-classes.jar:unspecified@jar,D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary:MOST_HapticAndroid.androidlib::release">
+    <dependency
+        name="D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary::release"
+        simpleName="Gradle:unityLibrary"/>
+    <dependency
+        name="__local_aars__:D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\libs\unity-classes.jar:unspecified@jar"
+        simpleName="__local_aars__:D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\libs\unity-classes.jar"/>
+    <dependency
+        name="D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary:MOST_HapticAndroid.androidlib::release"
+        simpleName="Gradle.unityLibrary:MOST_HapticAndroid.androidlib"/>
+  </package>
+</dependencies>

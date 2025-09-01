@@ -1,0 +1,32 @@
+<libraries>
+  <library
+      name="D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary::release"
+      jars="D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\build\.transforms\d696f2afc7eb04cc6373ace2b5b788cb\transformed\out\jars\classes.jar;D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\build\.transforms\d696f2afc7eb04cc6373ace2b5b788cb\transformed\out\jars\libs\R.jar;D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\build\.transforms\d696f2afc7eb04cc6373ace2b5b788cb\transformed\out\jars\libs\unity-classes.jar"
+      resolved="Gradle:unityLibrary:unspecified"
+      folder="D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\build\.transforms\d696f2afc7eb04cc6373ace2b5b788cb\transformed\out"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
+  <library
+      name="__local_aars__:D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\libs\unity-classes.jar:unspecified@jar"
+      jars="D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\libs\unity-classes.jar"
+      resolved="__local_aars__:D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\libs\unity-classes.jar:unspecified"/>
+  <library
+      name="D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary:MOST_HapticAndroid.androidlib::release"
+      jars="D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\MOST_HapticAndroid.androidlib\build\.transforms\eedf810f44ce020c844ecfbe7fd3bfae\transformed\out\jars\classes.jar;D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\MOST_HapticAndroid.androidlib\build\.transforms\eedf810f44ce020c844ecfbe7fd3bfae\transformed\out\jars\libs\R.jar"
+      resolved="Gradle.unityLibrary:MOST_HapticAndroid.androidlib:unspecified"
+      folder="D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\MOST_HapticAndroid.androidlib\build\.transforms\eedf810f44ce020c844ecfbe7fd3bfae\transformed\out"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
+</libraries>
