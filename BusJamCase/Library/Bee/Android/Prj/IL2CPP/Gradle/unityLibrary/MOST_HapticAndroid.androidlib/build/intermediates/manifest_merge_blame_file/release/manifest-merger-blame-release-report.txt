@@ -1,0 +1,30 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.yourcompany.hapticlib" >
+4
+5    <uses-sdk android:minSdkVersion="22" />
+5-->D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\MOST_HapticAndroid.androidlib\AndroidManifest.xml
+6
+7    <!-- Essential Vibration Permission -->
+8    <uses-permission android:name="android.permission.VIBRATE" />
+8-->D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\MOST_HapticAndroid.androidlib\AndroidManifest.xml:6:5-66
+8-->D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\MOST_HapticAndroid.androidlib\AndroidManifest.xml:6:22-63
+9
+10    <!-- For Android 12+ compatibility -->
+11    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+11-->D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\MOST_HapticAndroid.androidlib\AndroidManifest.xml:9:5-81
+11-->D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\MOST_HapticAndroid.androidlib\AndroidManifest.xml:9:22-78
+12
+13    <!-- Optional: Prevent Doze mode blocking -->
+14    <uses-permission android:name="android.permission.WAKE_LOCK" />
+14-->D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\MOST_HapticAndroid.androidlib\AndroidManifest.xml:12:5-68
+14-->D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\MOST_HapticAndroid.androidlib\AndroidManifest.xml:12:22-65
+15
+16    <application android:allowBackup="true" >
+16-->D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\MOST_HapticAndroid.androidlib\AndroidManifest.xml:14:5-16:19
+16-->D:\BusJamCase\BusJamCase\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\MOST_HapticAndroid.androidlib\AndroidManifest.xml:14:18-44
+17
+18        <!-- Your library components (if any) -->
+19    </application>
+20
+21</manifest>
